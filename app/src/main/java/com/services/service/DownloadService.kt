@@ -4,6 +4,8 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.services.utils.Constants.EMAIL
+import com.services.utils.Constants.NAME
 import com.services.utils.Constants.USER_DATA_DOWNLOADED
 import com.services.utils.Constants.USER_DATA_SAVED
 
@@ -18,13 +20,13 @@ class DownloadService : IntentService("DownloadService") {
         when (intent?.action) {
 
             ACTION_DOWNLOAD -> {
-                val name = intent.getStringExtra("name")
+                val name = intent.getStringExtra(NAME)
                 downloadData(name)
             }
 
             ACTION_SAVE -> {
-                val name = intent.getStringExtra("name")
-                val email = intent.getStringExtra("email")
+                val name = intent.getStringExtra(NAME)
+                val email = intent.getStringExtra(EMAIL)
                 saveInformation(name, email)
             }
         }
@@ -36,6 +38,8 @@ class DownloadService : IntentService("DownloadService") {
         Log.i(TAG, "saved: $name$email")
         val intent = Intent().apply {
             action = USER_DATA_SAVED
+            putExtra(NAME, name)
+            putExtra(EMAIL, email)
         }
         sendBroadcast(intent)
     }
@@ -46,6 +50,7 @@ class DownloadService : IntentService("DownloadService") {
         Log.i(TAG, "downloaded: $name")
         val intent = Intent().apply {
             action = USER_DATA_DOWNLOADED
+            putExtra(NAME, name)
         }
         sendBroadcast(intent)
         //stopSelf()
@@ -57,7 +62,7 @@ class DownloadService : IntentService("DownloadService") {
 
         fun downloadUserData(context: Context, name: String) {
             val intent = Intent(context, DownloadService::class.java).apply {
-                putExtra("name", name)
+                putExtra(NAME, name)
                 action = ACTION_DOWNLOAD
             }
             context.startService(intent)
@@ -66,8 +71,8 @@ class DownloadService : IntentService("DownloadService") {
 
         fun saveUserInformation(context: Context, name: String, email: String) {
             val intent = Intent(context, DownloadService::class.java).apply {
-                putExtra("name", name)
-                putExtra("email", email)
+                putExtra(NAME, name)
+                putExtra(EMAIL, email)
                 action = ACTION_SAVE
             }
             context.startService(intent)

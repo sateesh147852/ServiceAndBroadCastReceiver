@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ServicesBroadCastReceiver">
+        <activity
+            android:name=".ui.SecondActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".broadcastReceiver.UpdateUserDataReceiver"
             android:enabled="true"
